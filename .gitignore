@@ -1,0 +1,75 @@
+*.swp
+*.*~
+project.lock.json
+.DS_Store
+*.pyc
+!logs/.gitkeep
+**/tmp/*
+*.log
+
+# Visual Studio Code
+.vscode
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+**/out/*
+**/build/*
+**/dist/*
+**/bin/*
+**/obj/*
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# Visual Studio 2015
+.vs/
+**/logs/*
+*.cache
+*.pdb
+
+# Ignore user-specific IDE configuration files
+.idea/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Node modules
+/node_modules
+**/node_modules
+
+# Build directories
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

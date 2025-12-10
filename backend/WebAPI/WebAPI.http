@@ -1,0 +1,5 @@
+﻿@WebAPI_HostAddress = https://localhost:7177
+
+GET {{WebAPI_HostAddress}}/api/claims/init
+
+###
