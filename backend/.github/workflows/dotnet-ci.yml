@@ -20,12 +20,15 @@ jobs:
         dotnet-version: '8.0.x'
         
     - name: Restore dependencies
+      working-directory: backend
       run: dotnet restore backend.sln
       
     - name: Build solution
+      working-directory: backend
       run: dotnet build backend.sln --configuration Release --no-restore
       
     - name: Run tests
+      working-directory: backend
       run: dotnet test backend.sln --configuration Release --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
       
     - name: Publish test results
@@ -33,18 +36,19 @@ jobs:
       if: always()
       with:
         name: Test Results
-        path: '**/test-results.trx'
+        path: 'backend/**/test-results.trx'
         reporter: dotnet-trx
         fail-on-error: true
         
     - name: Run tests with coverage
+      working-directory: backend
       run: dotnet test backend.sln --configuration Release --no-build --collect:"XPlat Code Coverage" --results-directory ./coverage
       
     - name: Upload coverage reports
       uses: codecov/codecov-action@v4
       if: always()
       with:
-        files: ./coverage/**/coverage.cobertura.xml
+        files: backend/coverage/**/coverage.cobertura.xml
         flags: unittests
         name: codecov-umbrella
         fail_ci_if_error: false
