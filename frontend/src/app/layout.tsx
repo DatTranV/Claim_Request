@@ -22,7 +22,7 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Claim Request - NET 3",
+  title: "Claim Request",
   description: "Claim Request System",
 };
 

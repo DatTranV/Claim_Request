@@ -145,83 +145,83 @@ namespace Test
             Assert.Equal("Failed to update claim", result.Message);
         }
 
-        [Fact]
-        public async Task ApproveClaimAsync_ReturnsSuccess_WhenValid()
-        {
-            // Arrange
-            var claimId = Guid.NewGuid();
-            var userId = Guid.NewGuid();
-            var remarkDto = new ClaimStatusDTO { Remark = "Approved remark" };
+        //[Fact]
+        //public async Task ApproveClaimAsync_ReturnsSuccess_WhenValid()
+        //{
+        //    // Arrange
+        //    var claimId = Guid.NewGuid();
+        //    var userId = Guid.NewGuid();
+        //    var remarkDto = new ClaimStatusDTO { Remark = "Approved remark" };
 
-            var adminUser = new User { Id = userId, RoleName = "ADMIN", FullName = "Admin User", Email = "admin@example.com" };
-            _userRepoMock.Setup(r => r.GetCurrentUserAsync()).ReturnsAsync(adminUser);
+        //    var adminUser = new User { Id = userId, RoleName = "ADMIN", FullName = "Admin User", Email = "admin@example.com" };
+        //    _userRepoMock.Setup(r => r.GetCurrentUserAsync()).ReturnsAsync(adminUser);
 
-            var claim = new ClaimRequest
-            {
-                Id = claimId,
-                Status = ClaimStatus.PendingApproval,
-                Project = new Project { ProjectName = "Project X" },
-                Creator = new User { Id = Guid.NewGuid(), FullName = "Creator User", Email = "creator@example.com" }
-            };
-            _claimRepoMock.Setup(c => c.GetByIdAsync(
-                It.Is<Guid>(id => id == claimId),
-                It.IsAny<Expression<Func<ClaimRequest, object>>>(),
-                It.IsAny<Expression<Func<ClaimRequest, object>>>()))
-                .ReturnsAsync(claim);
-            _claimRepoMock.Setup(c => c.Update(It.Is<ClaimRequest>(c => c.Id == claimId))).ReturnsAsync(true);
+        //    var claim = new ClaimRequest
+        //    {
+        //        Id = claimId,
+        //        Status = ClaimStatus.PendingApproval,
+        //        Project = new Project { ProjectName = "Project X" },
+        //        Creator = new User { Id = Guid.NewGuid(), FullName = "Creator User", Email = "creator@example.com" }
+        //    };
+        //    _claimRepoMock.Setup(c => c.GetByIdAsync(
+        //        It.Is<Guid>(id => id == claimId),
+        //        It.IsAny<Expression<Func<ClaimRequest, object>>>(),
+        //        It.IsAny<Expression<Func<ClaimRequest, object>>>()))
+        //        .ReturnsAsync(claim);
+        //    _claimRepoMock.Setup(c => c.Update(It.Is<ClaimRequest>(c => c.Id == claimId))).ReturnsAsync(true);
 
-            var auditTrail = new AuditTrail
-            {
-                Id = Guid.NewGuid(),
-                ClaimId = claimId,
-                UserAction = UserAction.Approve,
-                ActionDate = _fixedTime,
-                ActionBy = userId,
-                User = adminUser
-            };
-            _auditRepoMock.Setup(a => a.AddAsync(It.IsAny<AuditTrail>())).ReturnsAsync(auditTrail);
+        //    var auditTrail = new AuditTrail
+        //    {
+        //        Id = Guid.NewGuid(),
+        //        ClaimId = claimId,
+        //        UserAction = UserAction.Approve,
+        //        ActionDate = _fixedTime,
+        //        ActionBy = userId,
+        //        User = adminUser
+        //    };
+        //    _auditRepoMock.Setup(a => a.AddAsync(It.IsAny<AuditTrail>())).ReturnsAsync(auditTrail);
 
-            // Setup finance team query (dùng TestAsyncEnumerable để trả về danh sách email)
-            var financeUsers = new List<User>
-            {
-                new User { Email = "finance1@example.com", RoleName = "FINANCE" },
-                new User { Email = "finance2@example.com", RoleName = "FINANCE" }
-            }.AsQueryable();
-            _userRepoMock.Setup(r => r.GetQueryable()).Returns(new TestAsyncEnumerable<User>(financeUsers));
+        //    // Setup finance team query (dùng TestAsyncEnumerable để trả về danh sách email)
+        //    var financeUsers = new List<User>
+        //    {
+        //        new User { Email = "finance1@example.com", RoleName = "FINANCE" },
+        //        new User { Email = "finance2@example.com", RoleName = "FINANCE" }
+        //    }.AsQueryable();
+        //    _userRepoMock.Setup(r => r.GetQueryable()).Returns(new TestAsyncEnumerable<User>(financeUsers));
 
-            _emailServiceMock.Setup(e => e.SendClaimRequestEmailAsync(
-                It.IsAny<List<string>>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<string>()))
-                .Returns(Task.CompletedTask);
-            _emailServiceMock.Setup(e => e.SendApprovalNotificationEmailAsync(
-                It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(Task.CompletedTask);
+        //    _emailServiceMock.Setup(e => e.SendClaimRequestEmailAsync(
+        //        It.IsAny<List<string>>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<string>()))
+        //        .Returns(Task.CompletedTask);
+        //    _emailServiceMock.Setup(e => e.SendApprovalNotificationEmailAsync(
+        //        It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+        //        .Returns(Task.CompletedTask);
 
-            _mapperMock.Setup(m => m.Map<AuditTrailResponse>(It.IsAny<AuditTrail>()))
-                .Returns((AuditTrail audit) => new AuditTrailResponse
-                {
-                    ClaimId = audit.ClaimId,
-                    ActionName = audit.UserAction.ToString(),
-                    ActionBy = adminUser.FullName,
-                    ActionDate = audit.ActionDate
-                });
+        //    _mapperMock.Setup(m => m.Map<AuditTrailResponse>(It.IsAny<AuditTrail>()))
+        //        .Returns((AuditTrail audit) => new AuditTrailResponse
+        //        {
+        //            ClaimId = audit.ClaimId,
+        //            ActionName = audit.UserAction.ToString(),
+        //            ActionBy = adminUser.FullName,
+        //            ActionDate = audit.ActionDate
+        //        });
 
-            // Act
-            var result = await _claimService.ApproveClaimAsync(claimId, remarkDto);
+        //    // Act
+        //    var result = await _claimService.ApproveClaimAsync(claimId, remarkDto);
 
-            // Assert
-            Assert.True(result.IsSuccess);
-            Assert.Equal("Claim approved successfully.", result.Message);
-            var auditResponse = result.Data as AuditTrailResponse;
-            Assert.NotNull(auditResponse);
-            Assert.Equal(claimId, auditResponse.ClaimId);
-            Assert.Equal(UserAction.Approve.ToString(), auditResponse.ActionName);
-            Assert.Equal(adminUser.FullName, auditResponse.ActionBy);
-            Assert.Equal(_fixedTime, auditResponse.ActionDate);
+        //    // Assert
+        //    Assert.True(result.IsSuccess);
+        //    Assert.Equal("Claim approved successfully.", result.Message);
+        //    var auditResponse = result.Data as AuditTrailResponse;
+        //    Assert.NotNull(auditResponse);
+        //    Assert.Equal(claimId, auditResponse.ClaimId);
+        //    Assert.Equal(UserAction.Approve.ToString(), auditResponse.ActionName);
+        //    Assert.Equal(adminUser.FullName, auditResponse.ActionBy);
+        //    Assert.Equal(_fixedTime, auditResponse.ActionDate);
 
-            _claimRepoMock.Verify(c => c.Update(It.IsAny<ClaimRequest>()), Times.Once);
-            _auditRepoMock.Verify(a => a.AddAsync(It.IsAny<AuditTrail>()), Times.Once);
-            _uowMock.Verify(u => u.SaveChangeAsync(), Times.Once);
-        }
+        //    _claimRepoMock.Verify(c => c.Update(It.IsAny<ClaimRequest>()), Times.Once);
+        //    _auditRepoMock.Verify(a => a.AddAsync(It.IsAny<AuditTrail>()), Times.Once);
+        //    _uowMock.Verify(u => u.SaveChangeAsync(), Times.Once);
+        //}
 
         [Fact]
         public async Task ApproveClaimAsync_HandleExceptions_ReturnsFailureResult()

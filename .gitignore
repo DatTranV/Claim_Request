@@ -71,5 +71,6 @@ dist-ssr
 *.suo
 *.ntvs*
 *.njsproj
-*.sln
 *.sw?
+# Allow backend solution file
+!backend/backend.sln

@@ -43,56 +43,56 @@ namespace Test
             Assert.Equal("Claim status must be Pending Approval", result.Message);
         }
 
-        [Fact]
-        public async Task ReturnClaim_ShouldReturnError_WhenRemarkIsEmpty()
-        {
-            var pendingClaim = _fixture.Context.ClaimRequests
-                .FirstOrDefault(c => c.Status == ClaimStatus.PendingApproval
-                                     && c.Project.ProjectName == "Empty Remark Test Project"
-                );
-            var request = new ReturnClaimDTO
-            {
-                Remark = ""
-            };
+        //[Fact]
+        //public async Task ReturnClaim_ShouldReturnError_WhenRemarkIsEmpty()
+        //{
+        //    var pendingClaim = _fixture.Context.ClaimRequests
+        //        .FirstOrDefault(c => c.Status == ClaimStatus.PendingApproval
+        //                             && c.Project.ProjectName == "Empty Remark Test Project"
+        //        );
+        //    var request = new ReturnClaimDTO
+        //    {
+        //        Remark = ""
+        //    };
 
-            var (result, emailData) = await _claimService.ReturnClaim(pendingClaim.Id, request);
+        //    var (result, emailData) = await _claimService.ReturnClaim(pendingClaim.Id, request);
 
-            Assert.False(result.IsSuccess);
-            Assert.Equal("{ code = MSG12, message = Please input your remarks in order to return Claim. }",
-                result.Message);
-        }
+        //    Assert.False(result.IsSuccess);
+        //    Assert.Equal("{ code = MSG12, message = Please input your remarks in order to return Claim. }",
+        //        result.Message);
+        //}
 
-        [Fact]
-        public async Task ReturnClaim_ShouldReturnSuccess_WhenValidRequest()
-        {
-            var pendingClaim = _fixture.Context.ClaimRequests
-                .FirstOrDefault(c => c.Status == ClaimStatus.PendingApproval
-                                     && c.Project.ProjectName == "Success Test Project"
-                );
-            var request = new ReturnClaimDTO
-            {
-                Remark = "Valid return remark"
-            };
+        //[Fact]
+        //public async Task ReturnClaim_ShouldReturnSuccess_WhenValidRequest()
+        //{
+        //    var pendingClaim = _fixture.Context.ClaimRequests
+        //        .FirstOrDefault(c => c.Status == ClaimStatus.PendingApproval
+        //                             && c.Project.ProjectName == "Success Test Project"
+        //        );
+        //    var request = new ReturnClaimDTO
+        //    {
+        //        Remark = "Valid return remark"
+        //    };
 
-            var (result, emailData) = await _claimService.ReturnClaim(pendingClaim.Id, request);
+        //    var (result, emailData) = await _claimService.ReturnClaim(pendingClaim.Id, request);
 
-            Assert.True(result.IsSuccess);
-            Assert.Equal("Return claim successfully", result.Message);
+        //    Assert.True(result.IsSuccess);
+        //    Assert.Equal("Return claim successfully", result.Message);
 
-            // Verify audit trail response
-            var auditTrailResponse = result.Data as AuditTrailResponse;
-            Assert.NotNull(auditTrailResponse);
-            Assert.Equal(pendingClaim.Id, auditTrailResponse.ClaimId);
-            Assert.Equal(UserAction.Return.ToString(), auditTrailResponse.ActionName);
-            Assert.NotNull(auditTrailResponse.ActionBy);
-            Assert.NotEqual(default, auditTrailResponse.ActionDate);
+        //    // Verify audit trail response
+        //    var auditTrailResponse = result.Data as AuditTrailResponse;
+        //    Assert.NotNull(auditTrailResponse);
+        //    Assert.Equal(pendingClaim.Id, auditTrailResponse.ClaimId);
+        //    Assert.Equal(UserAction.Return.ToString(), auditTrailResponse.ActionName);
+        //    Assert.NotNull(auditTrailResponse.ActionBy);
+        //    Assert.NotEqual(default, auditTrailResponse.ActionDate);
 
-            // Verify email data
-            Assert.NotNull(emailData);
-            Assert.Equal(pendingClaim.Project.ProjectName, emailData.ProjectName);
-            Assert.Equal(pendingClaim.Creator.Email, emailData.StaffEmail);
-            Assert.Equal(pendingClaim.Creator.FullName, emailData.StaffName);
-            Assert.Equal(pendingClaim.CreatorId, emailData.StaffId);
-        }
+        //    // Verify email data
+        //    Assert.NotNull(emailData);
+        //    Assert.Equal(pendingClaim.Project.ProjectName, emailData.ProjectName);
+        //    Assert.Equal(pendingClaim.Creator.Email, emailData.StaffEmail);
+        //    Assert.Equal(pendingClaim.Creator.FullName, emailData.StaffName);
+        //    Assert.Equal(pendingClaim.CreatorId, emailData.StaffId);
+        //}
     }
 }

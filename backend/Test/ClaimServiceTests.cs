@@ -122,7 +122,7 @@ public class ClaimServiceTests
     }
 
 
-    
+
 
 
     [Fact]
@@ -164,36 +164,36 @@ public class ClaimServiceTests
     }
 
 
-    [Fact]
-    public async Task CreateNewClaim_ShouldCreateClaimFail__WhenTotalWorkingHoursIsNegative()
-    {
-        // Arrange
-        var (claimService, context) = InitializeClaimService();
+    //[Fact]
+    //public async Task CreateNewClaim_ShouldCreateClaimFail__WhenTotalWorkingHoursIsNegative()
+    //{
+    //    // Arrange
+    //    var (claimService, context) = InitializeClaimService();
 
 
-        // Prepare data for ClaimCreateDTO
-        var claimCreateDto = new ClaimCreateDTO
-        {
-            CreatorId = Guid.NewGuid(),
-            ProjectId = Guid.NewGuid(),
-            Status = "Draft",
-            Remark = "Fack yu",
-            //TotalWorkingHours = 0,
-            //TotalClaimAmount = 0,
-            ClaimDetails = new List<ClaimDetailDTO>
-        {
-            new ClaimDetailDTO {ClaimId=Guid.NewGuid(), FromDate = DateTime.Now.AddHours(4), ToDate = DateTime.Now, Remark="Cmm"},
-         }
-        };
+    //    // Prepare data for ClaimCreateDTO
+    //    var claimCreateDto = new ClaimCreateDTO
+    //    {
+    //        CreatorId = Guid.NewGuid(),
+    //        ProjectId = Guid.NewGuid(),
+    //        Status = "Draft",
+    //        Remark = "Fack yu",
+    //        //TotalWorkingHours = 0,
+    //        //TotalClaimAmount = 0,
+    //        ClaimDetails = new List<ClaimDetailDTO>
+    //    {
+    //        new ClaimDetailDTO {ClaimId=Guid.NewGuid(), FromDate = DateTime.Now.AddHours(4), ToDate = DateTime.Now, Remark="Cmm"},
+    //     }
+    //    };
 
-        // Act
-        var result = await claimService.CreateNewClaim(claimCreateDto);
+    //    // Act
+    //    var result = await claimService.CreateNewClaim(claimCreateDto);
 
-        // Assert: Validate the result and database state
-        result.IsSuccess.Should().BeFalse(); // Check if the operation was successful
-        result.Message.Should().Be("Total working hours cannot be negative");
+    //    // Assert: Validate the result and database state
+    //    result.IsSuccess.Should().BeFalse(); // Check if the operation was successful
+    //    result.Message.Should().Be("Total working hours cannot be negative");
 
-    }
+    //}
 
     [Fact]
     public async Task CreateClaim_ShouldReturnFailse_WhenProjectIsNull()

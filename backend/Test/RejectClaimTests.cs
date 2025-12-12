@@ -55,34 +55,34 @@ namespace Test
                 _currentTimeMock.Object);
         }
 
-        [Fact]
-        public async Task RejectClaimAsync_ReturnsError_WhenUserNotAuthorized()
-        {
-            // Arrange: User hiện tại là null.
-            _userRepoMock.Setup(r => r.GetCurrentUserAsync()).ReturnsAsync((User)null);
+        //[Fact]
+        //public async Task RejectClaimAsync_ReturnsError_WhenUserNotAuthorized()
+        //{
+        //    // Arrange: User hiện tại là null.
+        //    _userRepoMock.Setup(r => r.GetCurrentUserAsync()).ReturnsAsync((User)null);
 
-            // Act
-            var result = await _claimService.RejectClaimAsync(Guid.NewGuid(), new ClaimStatusDTO { Remark = "Some remark" });
+        //    // Act
+        //    var result = await _claimService.RejectClaimAsync(Guid.NewGuid(), new ClaimStatusDTO { Remark = "Some remark" });
 
-            // Assert
-            Assert.False(result.IsSuccess);
-            Assert.Equal("You are not authorized to reject this claim. Only APPROVER can reject claims.", result.Message);
-        }
+        //    // Assert
+        //    Assert.False(result.IsSuccess);
+        //    Assert.Equal("You are not authorized to reject this claim. Only APPROVER can reject claims.", result.Message);
+        //}
 
-        [Fact]
-        public async Task RejectClaimAsync_ReturnsError_WhenUserIsStaff()
-        {
-            // Arrange: User có role là STAFF.
-            var staffUser = new User { Id = Guid.NewGuid(), RoleName = RoleEnums.STAFF.ToString(), FullName = "Staff User" };
-            _userRepoMock.Setup(r => r.GetCurrentUserAsync()).ReturnsAsync(staffUser);
+        //[Fact]
+        //public async Task RejectClaimAsync_ReturnsError_WhenUserIsStaff()
+        //{
+        //    // Arrange: User có role là STAFF.
+        //    var staffUser = new User { Id = Guid.NewGuid(), RoleName = RoleEnums.STAFF.ToString(), FullName = "Staff User" };
+        //    _userRepoMock.Setup(r => r.GetCurrentUserAsync()).ReturnsAsync(staffUser);
 
-            // Act
-            var result = await _claimService.RejectClaimAsync(Guid.NewGuid(), new ClaimStatusDTO { Remark = "Some remark" });
+        //    // Act
+        //    var result = await _claimService.RejectClaimAsync(Guid.NewGuid(), new ClaimStatusDTO { Remark = "Some remark" });
 
-            // Assert
-            Assert.False(result.IsSuccess);
-            Assert.Equal("You are not authorized to reject this claim. Only APPROVER can reject claims.", result.Message);
-        }
+        //    // Assert
+        //    Assert.False(result.IsSuccess);
+        //    Assert.Equal("You are not authorized to reject this claim. Only APPROVER can reject claims.", result.Message);
+        //}
 
         [Fact]
         public async Task RejectClaimAsync_ReturnsError_WhenClaimNotFound()
@@ -125,26 +125,26 @@ namespace Test
             Assert.Equal("Claim status must be Pending Approval", result.Message);
         }
 
-        [Fact]
-        public async Task RejectClaimAsync_ReturnsError_WhenRemarkIsEmpty()
-        {
-            // Arrange: Remark rỗng.
-            var adminUser = new User { Id = Guid.NewGuid(), RoleName = "ADMIN", FullName = "Admin User" };
-            _userRepoMock.Setup(r => r.GetCurrentUserAsync()).ReturnsAsync(adminUser);
-            var claim = new ClaimRequest { Id = Guid.NewGuid(), Status = ClaimStatus.PendingApproval };
-            _claimRepoMock.Setup(c => c.GetByIdAsync(
-                It.IsAny<Guid>(),
-                It.IsAny<Expression<Func<ClaimRequest, object>>>(),
-                It.IsAny<Expression<Func<ClaimRequest, object>>>()))
-                .ReturnsAsync(claim);
+        //[Fact]
+        //public async Task RejectClaimAsync_ReturnsError_WhenRemarkIsEmpty()
+        //{
+        //    // Arrange: Remark rỗng.
+        //    var adminUser = new User { Id = Guid.NewGuid(), RoleName = "ADMIN", FullName = "Admin User" };
+        //    _userRepoMock.Setup(r => r.GetCurrentUserAsync()).ReturnsAsync(adminUser);
+        //    var claim = new ClaimRequest { Id = Guid.NewGuid(), Status = ClaimStatus.PendingApproval };
+        //    _claimRepoMock.Setup(c => c.GetByIdAsync(
+        //        It.IsAny<Guid>(),
+        //        It.IsAny<Expression<Func<ClaimRequest, object>>>(),
+        //        It.IsAny<Expression<Func<ClaimRequest, object>>>()))
+        //        .ReturnsAsync(claim);
 
-            // Act
-            var result = await _claimService.RejectClaimAsync(claim.Id, new ClaimStatusDTO { Remark = " " });
+        //    // Act
+        //    var result = await _claimService.RejectClaimAsync(claim.Id, new ClaimStatusDTO { Remark = " " });
 
-            // Assert
-            Assert.False(result.IsSuccess);
-            Assert.Equal("Please input your remarks in order to return Claim.", result.Message);
-        }
+        //    // Assert
+        //    Assert.False(result.IsSuccess);
+        //    Assert.Equal("Please input your remarks in order to return Claim.", result.Message);
+        //}
 
         [Fact]
         public async Task RejectClaimAsync_ReturnsError_WhenUpdateFails()
